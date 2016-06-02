@@ -8,28 +8,37 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Input;
 use Auth;
-use Skmetaly\TwitchApi\Services\TwitchApiService as TwitchApi;
+use Skmetaly\TwitchApi\Services\TwitchApiService;
 
 class AuthController extends Controller
 {
+    protected static $TwitchApi;
+    protected static $Request;
 
-    public function login(TwitchApi $api){
-        return redirect($api->authenticationURL());
+    public function __construct(TwitchApiService $twitchApi, Request $request)
+    {
+        $this::TwitchApi = $twitchApi;
+        $this::Request = $request;
     }
 
-    public function auth(Request $request, TwitchApi $api){
-        $token = $api->requestToken($request->get('code'));
+    public function login(){
+        return redirect($this::TwitchApi->authenticationURL());
+    }
+
+    public function auth(){
+        $token = $this::TwitchApi->requestToken($this::Request->get('code'));
         session(['token' => $token]);
-        $twitchUser = $api->authenticatedUser($token);
+
+        $twitchUser = $this::TwitchApi->authenticatedUser($token);
         $user = User::firstOrNew(['username' => $twitchUser["display_name"]]);
+
         if($user->exists === false){
             $user->username = $twitchUser["display_name"];
             $user->email = $twitchUser["email"];
             $user->save();
-        } else {
-            Auth::login($user);
         }
 
+        Auth::login($user);
         return redirect('/');
     }
 }
