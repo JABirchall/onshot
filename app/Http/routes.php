@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/login', ['as' => 'login', 'uses' => 'AuthController@login']);
+Route::get('/twitchAuth', ['as' => 'twitchAuth', 'uses' => 'AuthController@auth']);
