@@ -22,4 +22,9 @@ class User extends Authenticatable
      */
     protected $hidden = [
     ];
+
+    public function shots()
+    {
+        return $this->hasMany('App\Shot');
+    }
 }

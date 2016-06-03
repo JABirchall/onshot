@@ -6,7 +6,6 @@ use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use Input;
 use Auth;
 use Skmetaly\TwitchApi\Services\TwitchApiService;
 
