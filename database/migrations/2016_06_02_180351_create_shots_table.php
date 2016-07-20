@@ -14,10 +14,12 @@ class CreateShotsTable extends Migration
     {
         Schema::create('shots', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->unsigned()->nullable();
             $table->text('shot_url');
             $table->text('shot_download_url');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
     }

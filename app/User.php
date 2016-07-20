@@ -21,6 +21,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        'token',
+        'email',
     ];
 
     public function shots()
